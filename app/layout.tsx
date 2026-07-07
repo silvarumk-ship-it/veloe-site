@@ -11,9 +11,11 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-// 👇 Seus dados do Pixel e Token
+// 👇 Seus IDs e tokens
 const FB_PIXEL_ID = "1402511185031681";
 const FB_ACCESS_TOKEN = "EAAIDzzA8qGQBR5ZCdFc2WVMhaiTX61JZAkOtSUk6ZCM335Yf7yYBoDl21xpH6StFh0LUvvs3wK1vw3TqHMrlTkuYvRQwooGodGGeCncbk2ymam9QBniZC5AE1VAFSZCYpKGXCalciZAkpUE8skOA61i8VQgzm60hP2UG10nzJAE2ILyJUZBTnFKkiyXPgYfvIyutgZDZD";
+const GOOGLE_ADS_ID = "AW-18193682923";
+const GOOGLE_CONVERSION_LABEL = "qNUoCK7w7sIcEOujtuND";
 
 export const metadata: Metadata = {
   title: "Veloe - Até 2 TAGs gratuitas para você!",
@@ -32,7 +34,37 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${montserrat.variable} flex min-h-screen flex-col antialiased`}>
-        {/* 🟩 Meta Pixel + estrutura para API de Conversões */}
+
+        {/* 🟦 Google Ads Tag */}
+        <Script
+          id="google-ads-tag"
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+        />
+        <Script
+          id="google-ads-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GOOGLE_ADS_ID}');
+
+              // Função para disparar conversão quando o cadastro for concluído
+              window.trackGoogleConversion = function() {
+                gtag('event', 'conversion', {
+                  'send_to': '${GOOGLE_ADS_ID}/${GOOGLE_CONVERSION_LABEL}',
+                  'value': 0,
+                  'currency': 'BRL'
+                });
+              };
+            `,
+          }}
+        />
+        {/* 🟦 Fim Google Ads */}
+
+        {/* 🟩 Meta Pixel */}
         <Script
           id="meta-pixel"
           strategy="afterInteractive"
@@ -47,29 +79,18 @@ export default function RootLayout({
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
               
-              // Inicializa o Pixel
               fbq('init', '${FB_PIXEL_ID}');
               fbq('track', 'PageView');
 
-              // Disponibiliza os dados para uso com a API
               window.FB_PIXEL_ID = '${FB_PIXEL_ID}';
               window.FB_ACCESS_TOKEN = '${FB_ACCESS_TOKEN}';
 
-              // Função pronta para enviar evento de cadastro pela API + Pixel
-              window.trackCompleteRegistration = function(userData = {}) {
-                // Envia pelo Pixel (método tradicional)
+              window.trackCompleteRegistration = function() {
                 fbq('track', 'CompleteRegistration', {
                   content_name: 'Cadastro Veloe',
                   status: 'completed',
                   currency: 'BRL',
                   value: 0
-                });
-
-                // Os dados da API serão usados na rota do servidor
-                console.log('Evento de cadastro preparado para envio:', {
-                  pixelId: window.FB_PIXEL_ID,
-                  accessToken: window.FB_ACCESS_TOKEN,
-                  userData
                 });
               };
             `,
@@ -84,12 +105,12 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        {/* 🟩 Fim da integração */}
+        {/* 🟩 Fim Meta Pixel */}
 
         <div className="flex-1">{children}</div>
         <SiteFooter />
 
-        {/* 🟩 Vercel Analytics mantido como estava */}
+        {/* 🟪 Vercel Analytics */}
         <Analytics />
       </body>
     </html>
