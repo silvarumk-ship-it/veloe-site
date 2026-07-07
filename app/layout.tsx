@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Montserrat } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import SiteFooter from "@/components/SiteFooter";
 import "./globals.css";
 
@@ -11,6 +10,7 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
+// ID do seu Pixel do Meta
 const FB_PIXEL_ID = "1402511185031681";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${montserrat.variable} flex min-h-screen flex-col antialiased`}>
-        {/* Meta Pixel */}
+        {/* Código do Meta Pixel */}
         <Script
           id="meta-pixel"
           strategy="afterInteractive"
@@ -58,12 +58,10 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
+        {/* Fim do Meta Pixel */}
 
         <div className="flex-1">{children}</div>
         <SiteFooter />
-
-        {/* Vercel Analytics */}
-        <Analytics />
       </body>
     </html>
   );
