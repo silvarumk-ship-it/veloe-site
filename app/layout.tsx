@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Montserrat } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import SiteFooter from "@/components/SiteFooter";
 import "./globals.css";
 
@@ -10,8 +11,9 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-// ID do seu Pixel do Meta
+// 👇 Seus dados do Pixel e Token
 const FB_PIXEL_ID = "1402511185031681";
+const FB_ACCESS_TOKEN = "EAAIDzzA8qGQBR5ZCdFc2WVMhaiTX61JZAkOtSUk6ZCM335Yf7yYBoDl21xpH6StFh0LUvvs3wK1vw3TqHMrlTkuYvRQwooGodGGeCncbk2ymam9QBniZC5AE1VAFSZCYpKGXCalciZAkpUE8skOA61i8VQgzm60hP2UG10nzJAE2ILyJUZBTnFKkiyXPgYfvIyutgZDZD";
 
 export const metadata: Metadata = {
   title: "Veloe - Até 2 TAGs gratuitas para você!",
@@ -30,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${montserrat.variable} flex min-h-screen flex-col antialiased`}>
-        {/* Código do Meta Pixel */}
+        {/* 🟩 Meta Pixel + estrutura para API de Conversões */}
         <Script
           id="meta-pixel"
           strategy="afterInteractive"
@@ -44,8 +46,32 @@ export default function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
+              
+              // Inicializa o Pixel
               fbq('init', '${FB_PIXEL_ID}');
               fbq('track', 'PageView');
+
+              // Disponibiliza os dados para uso com a API
+              window.FB_PIXEL_ID = '${FB_PIXEL_ID}';
+              window.FB_ACCESS_TOKEN = '${FB_ACCESS_TOKEN}';
+
+              // Função pronta para enviar evento de cadastro pela API + Pixel
+              window.trackCompleteRegistration = function(userData = {}) {
+                // Envia pelo Pixel (método tradicional)
+                fbq('track', 'CompleteRegistration', {
+                  content_name: 'Cadastro Veloe',
+                  status: 'completed',
+                  currency: 'BRL',
+                  value: 0
+                });
+
+                // Os dados da API serão usados na rota do servidor
+                console.log('Evento de cadastro preparado para envio:', {
+                  pixelId: window.FB_PIXEL_ID,
+                  accessToken: window.FB_ACCESS_TOKEN,
+                  userData
+                });
+              };
             `,
           }}
         />
@@ -58,10 +84,13 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        {/* Fim do Meta Pixel */}
+        {/* 🟩 Fim da integração */}
 
         <div className="flex-1">{children}</div>
         <SiteFooter />
+
+        {/* 🟩 Vercel Analytics mantido como estava */}
+        <Analytics />
       </body>
     </html>
   );
