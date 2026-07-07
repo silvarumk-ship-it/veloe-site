@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Montserrat } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import SiteFooter from "@/components/SiteFooter";
 import "./globals.css";
 
@@ -110,8 +109,6 @@ export default function RootLayout({
         <div className="flex-1">{children}</div>
         <SiteFooter />
 
-        {/* 🟪 Vercel Analytics */}
-        <Analytics />
       </body>
     </html>
   );
