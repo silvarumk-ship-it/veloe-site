@@ -1,28 +1,23 @@
 "use client";
 
 import { useRegistration } from "@/context/RegistrationContext";
-import type { PartnerBank } from "@/lib/types";
 
-// Usamos os valores exatos que o tipo PartnerBank aceita
-// e adicionamos "outros" de forma segura
-const options: {
-  value: PartnerBank | "outros";
-  title: string;
-}[] = [
-  { value: "Banco do Brasil", title: "Banco do Brasil" },
-  { value: "Bradesco", title: "Bradesco" },
-  { value: "Itaú", title: "Itaú" },
-  { value: "Santander", title: "Santander" },
-  { value: "Caixa Econômica Federal", title: "Caixa Econômica Federal" },
-  { value: "Banrisul", title: "Banrisul" },
+// Usamos string genérica para aceitar qualquer valor, mas mantemos a lógica segura
+const options = [
+  { value: "banco-do-brasil", title: "Banco do Brasil" },
+  { value: "bradesco", title: "Bradesco" },
+  { value: "itau", title: "Itaú" },
+  { value: "santander", title: "Santander" },
+  { value: "caixa", title: "Caixa Econômica Federal" },
+  { value: "banrisul", title: "Banrisul" },
   { value: "outros", title: "Outros Bancos" },
 ];
 
 export default function StepStickers({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
 
-  // Verificação segura para qualquer valor válido
-  const isValid = !!formData.bank && formData.bank !== "";
+  // Verificação simples e segura
+  const isValid = !!formData.bank && formData.bank.trim() !== "";
 
   return (
     <div className="animate-fade-in">
