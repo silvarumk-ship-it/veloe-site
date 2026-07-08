@@ -10,7 +10,7 @@ export default function StepSuccess() {
     <div className="animate-fade-in text-center">
       <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center">
         <ConfettiDecor />
-        <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-[#82c91e] shadow-[0_8px_24px_rgba(130,201,30,0.4)]">
+        <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-[#82c91e] shadow-[0_8px_24px_rgba(130,201,30,0.4)] transition-transform duration-300 hover:scale-[1.03]">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
             <path
               d="M6 12l4 4 8-8"
@@ -36,7 +36,7 @@ export default function StepSuccess() {
         Obrigado por utilizar nossos serviços!
       </p>
 
-      <div className="mt-8 rounded-2xl bg-[#eef0f8] p-5 text-left sm:p-6">
+      <div className="mt-8 rounded-2xl bg-[#eef0f8] p-5 text-left shadow-sm sm:p-6">
         <h2 className="font-bold text-veloe-navy">O que acontece agora?</h2>
         <ul className="mt-4 space-y-4">
           <NextStepItem
@@ -62,7 +62,7 @@ export default function StepSuccess() {
       <Link
         href="/"
         onClick={resetForm}
-        className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-veloe-navy py-4 text-base font-bold text-white shadow-[0_4px_16px_rgba(29,27,132,0.3)] transition-all hover:bg-veloe-navy-dark"
+        className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-veloe-navy py-4 text-base font-bold text-white shadow-[0_4px_16px_rgba(29,27,132,0.3)] transition-all duration-200 hover:bg-veloe-navy-dark hover:shadow-[0_6px_20px_rgba(29,27,132,0.35)] active:scale-[0.98]"
       >
         <HomeIcon />
         Voltar para o início
@@ -80,7 +80,7 @@ function NextStepItem({
 }) {
   return (
     <li className="flex items-start gap-3">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
         {icon}
       </div>
       <p className="text-sm leading-relaxed text-veloe-navy/80">{text}</p>
