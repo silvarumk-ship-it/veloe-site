@@ -3,24 +3,25 @@
 import { useRegistration } from "@/context/RegistrationContext";
 import type { PartnerBank } from "@/lib/types";
 
-// Usamos o tipo que já existe no sistema
+// Usamos os valores exatos que o tipo PartnerBank aceita
+// e adicionamos "outros" de forma segura
 const options: {
-  value: PartnerBank;
+  value: PartnerBank | "outros";
   title: string;
 }[] = [
-  { value: "banco-do-brasil", title: "Banco do Brasil" },
-  { value: "bradesco", title: "Bradesco" },
-  { value: "itau", title: "Itaú" },
-  { value: "santander", title: "Santander" },
-  { value: "caixa", title: "Caixa Econômica Federal" },
-  { value: "banrisul", title: "Banrisul" },
+  { value: "Banco do Brasil", title: "Banco do Brasil" },
+  { value: "Bradesco", title: "Bradesco" },
+  { value: "Itaú", title: "Itaú" },
+  { value: "Santander", title: "Santander" },
+  { value: "Caixa Econômica Federal", title: "Caixa Econômica Federal" },
+  { value: "Banrisul", title: "Banrisul" },
   { value: "outros", title: "Outros Bancos" },
 ];
 
 export default function StepStickers({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
 
-  // Verificação segura e compatível com o tipo existente
+  // Verificação segura para qualquer valor válido
   const isValid = !!formData.bank && formData.bank !== "";
 
   return (
