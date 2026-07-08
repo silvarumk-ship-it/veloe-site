@@ -1,23 +1,27 @@
 "use client";
 
 import { useRegistration } from "@/context/RegistrationContext";
+import type { PartnerBank } from "@/lib/types";
 
-// Usamos string genérica para aceitar qualquer valor, mas mantemos a lógica segura
-const options = [
-  { value: "banco-do-brasil", title: "Banco do Brasil" },
-  { value: "bradesco", title: "Bradesco" },
-  { value: "itau", title: "Itaú" },
-  { value: "santander", title: "Santander" },
-  { value: "caixa", title: "Caixa Econômica Federal" },
-  { value: "banrisul", title: "Banrisul" },
-  { value: "outros", title: "Outros Bancos" },
+// Lista com os valores que já funcionavam no seu sistema + nova opção
+const options: {
+  value: PartnerBank | "";
+  title: string;
+}[] = [
+  { value: "banco-do-brasil" as PartnerBank, title: "Banco do Brasil" },
+  { value: "bradesco" as PartnerBank, title: "Bradesco" },
+  { value: "itau" as PartnerBank, title: "Itaú" },
+  { value: "santander" as PartnerBank, title: "Santander" },
+  { value: "caixa" as PartnerBank, title: "Caixa Econômica Federal" },
+  { value: "banrisul" as PartnerBank, title: "Banrisul" },
+  { value: "" as PartnerBank, title: "Outros Bancos" },
 ];
 
 export default function StepStickers({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
 
-  // Verificação simples e segura
-  const isValid = !!formData.bank && formData.bank.trim() !== "";
+  // Verificação segura: botão libera quando qualquer opção for escolhida
+  const isValid = !!formData.bank;
 
   return (
     <div className="animate-fade-in">
@@ -34,7 +38,7 @@ export default function StepStickers({ onNext }: { onNext: () => void }) {
           const selected = formData.bank === option.value;
           return (
             <button
-              key={option.value}
+              key={option.value || "outros"}
               type="button"
               onClick={() => updateFormData({ bank: option.value })}
               className={`flex w-full items-center justify-between rounded-2xl border-2 bg-white p-4 text-left transition-all duration-200 sm:p-5 ${
