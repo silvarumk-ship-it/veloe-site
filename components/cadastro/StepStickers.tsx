@@ -1,7 +1,9 @@
 "use client";
 
 import { useRegistration } from "@/context/RegistrationContext";
-import type { Bank } from "@/lib/types";
+
+// ✅ Define o tipo aqui mesmo, sem precisar importar de fora
+type Bank = "banco-do-brasil" | "bradesco" | "itau" | "santander" | "caixa" | "banrisul" | "outros";
 
 const options: {
   value: Bank;
@@ -13,14 +15,11 @@ const options: {
   { value: "santander", title: "Santander" },
   { value: "caixa", title: "Caixa Econômica Federal" },
   { value: "banrisul", title: "Banrisul" },
-  // ✅ Nova opção adicionada
   { value: "outros", title: "Outros Bancos" },
 ];
 
 export default function StepStickers({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
-
-  // ✅ Verificação simples e reativa: libera o botão na hora
   const isValid = !!formData.bank;
 
   return (
@@ -28,7 +27,6 @@ export default function StepStickers({ onNext }: { onNext: () => void }) {
       <h1 className="text-2xl font-bold leading-tight text-veloe-navy sm:text-[1.65rem]">
         Selecione seu banco
       </h1>
-      {/* ✅ Texto ajustado para não gerar dúvida */}
       <p className="mt-2 text-sm leading-relaxed text-veloe-navy/70 sm:text-[15px]">
         Escolha o banco onde você tem conta. <br />
         Não encontrou o seu? Selecione <strong>Outros Bancos</strong>.
