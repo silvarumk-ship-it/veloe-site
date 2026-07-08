@@ -10,7 +10,13 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 lg:block">
+      {/* Área da imagem AGORA CLICÁVEL - Versão Desktop */}
+      <Link
+        href="/cadastro"
+        onClick={() => sessionStorage.setItem("veloe-home-tab", activeTab)}
+        className="pointer-events-auto absolute inset-y-0 right-0 hidden w-1/2 lg:block z-10"
+        aria-label="Iniciar resgate da TAG Veloe"
+      >
         {(["pessoa-fisica", "pessoa-juridica", "parcerias"] as const).map(
           (tab) => (
             <div
@@ -23,7 +29,7 @@ export default function HeroSection() {
             >
               <Image
                 src={heroContent[tab].image}
-                alt=""
+                alt="Iniciar resgate da TAG Veloe"
                 fill
                 className="object-cover object-center"
                 priority={tab === "pessoa-fisica"}
@@ -33,7 +39,7 @@ export default function HeroSection() {
           )
         )}
         <div className="absolute inset-0 bg-gradient-to-r from-white/50 from-[0%] via-white/15 via-[24%] to-transparent to-[58%]" />
-      </div>
+      </Link>
 
       <div className="relative mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row lg:items-stretch lg:min-h-[580px]">
@@ -70,7 +76,13 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="relative order-1 h-[260px] w-full sm:h-[320px] md:h-[380px] lg:order-2 lg:hidden">
+          {/* Área da imagem AGORA CLICÁVEL - Versão Celular */}
+          <Link
+            href="/cadastro"
+            onClick={() => sessionStorage.setItem("veloe-home-tab", activeTab)}
+            className="relative order-1 h-[260px] w-full sm:h-[320px] md:h-[380px] lg:order-2 lg:hidden z-10"
+            aria-label="Iniciar resgate da TAG Veloe"
+          >
             {(["pessoa-fisica", "pessoa-juridica", "parcerias"] as const).map(
               (tab) => (
                 <div
@@ -94,16 +106,16 @@ export default function HeroSection() {
             )}
             <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
 
-            <div className="absolute inset-x-3 bottom-4 sm:inset-x-5 sm:bottom-5">
+            <div className="absolute inset-x-3 bottom-4 sm:inset-x-5 sm:bottom-5 pointer-events-none">
               <div className="mx-auto max-w-lg overflow-hidden rounded-full bg-veloe-navy py-2 pl-2 pr-4 shadow-[0_8px_24px_rgba(29,27,132,0.3)] sm:py-2.5 sm:pl-2.5 sm:pr-5">
                 <FloatingCardContent compact />
               </div>
             </div>
-          </div>
+          </Link>
 
           <div className="pointer-events-none relative order-2 hidden lg:order-2 lg:block lg:w-[48%]">
-            <div className="absolute bottom-10 right-6 xl:bottom-14 xl:right-10">
-              <div className="pointer-events-auto max-w-[340px] overflow-hidden rounded-full bg-veloe-navy py-3 pl-3 pr-7 shadow-[0_12px_32px_rgba(29,27,132,0.35)]">
+            <div className="absolute bottom-10 right-6 xl:bottom-14 xl:right-10 pointer-events-auto z-20">
+              <div className="max-w-[340px] overflow-hidden rounded-full bg-veloe-navy py-3 pl-3 pr-7 shadow-[0_12px_32px_rgba(29,27,132,0.35)]">
                 <FloatingCardContent />
               </div>
             </div>
@@ -153,11 +165,11 @@ export function CTAButton({
       href="/cadastro"
       id={id}
       onClick={() => sessionStorage.setItem("veloe-home-tab", activeTab)}
-      className={`group inline-flex items-center overflow-hidden rounded-full bg-veloe-cyan py-2 pl-6 pr-1.5 text-sm font-bold text-white shadow-[0_4px_16px_rgba(38,208,224,0.4)] transition-all hover:bg-veloe-cyan-hover sm:py-2.5 sm:pl-8 sm:pr-2 sm:text-base md:text-lg md:pl-10 md:py-3 ${className}`}
+      className={`group inline-flex items-center overflow-hidden rounded-full bg-veloe-cyan py-2.5 pl-7 pr-2 text-base font-bold text-white shadow-[0_6px_20px_rgba(38,208,224,0.45)] transition-all duration-200 hover:bg-veloe-cyan-hover hover:shadow-[0_8px_24px_rgba(38,208,224,0.55)] active:scale-[0.98] sm:py-3 sm:pl-9 sm:pr-2.5 sm:text-lg md:text-xl md:pl-11 md:py-3.5 ${className}`}
     >
-      <span className="pr-3 sm:pr-4">Iniciar resgate</span>
-      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-veloe-cyan transition-transform group-hover:translate-x-0.5 sm:h-10 sm:w-10 md:h-11 md:w-11">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <span className="pr-4 sm:pr-5">Iniciar resgate</span>
+      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-veloe-cyan transition-transform duration-200 group-hover:translate-x-1 sm:h-11 sm:w-11 md:h-12 md:w-12">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <path
             d="M9 6l6 6-6 6"
             stroke="currentColor"
