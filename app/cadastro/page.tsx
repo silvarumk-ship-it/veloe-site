@@ -83,6 +83,13 @@ export default function CadastroPage() {
           setStep(4);
           setSubStep(2);
         });
+
+        // ✅ AQUI: Dispara a contagem para Google Ads e Meta Pixel
+        if (typeof window !== "undefined") {
+          if (window.trackGoogleConversion) window.trackGoogleConversion();
+          if (window.trackCompleteRegistration) window.trackCompleteRegistration();
+        }
+
         window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       } catch {
