@@ -5,7 +5,6 @@ import { useRegistration } from "@/context/RegistrationContext";
 import {
   formatCPF,
   formatPhone,
-  isPersonalDataFilled,
   validateCPF,
   validateEmail,
   validateFullName,
@@ -21,6 +20,7 @@ interface FieldProps {
   type?: string;
   error?: string;
   maxLength?: number;
+  onBlur?: () => void;
 }
 
 function FormField({
@@ -31,12 +31,15 @@ function FormField({
   type = "text",
   error,
   maxLength,
+  onBlur,
 }: FieldProps) {
   return (
     <div>
       <div
-        className={`flex items-center gap-3 rounded-2xl border bg-white px-4 py-3.5 transition-colors ${
-          error ? "border-red-300" : "border-gray-200 focus-within:border-veloe-cyan"
+        className={`flex items-center gap-3 rounded-2xl border bg-white px-4 py-3.5 transition-all duration-200 ${
+          error 
+            ? "border-red-300" 
+            : "border-gray-200 focus-within:border-veloe-cyan focus-within:shadow-sm"
         }`}
       >
         <span className="shrink-0 text-veloe-navy/40">{icon}</span>
@@ -46,6 +49,7 @@ function FormField({
           value={value}
           maxLength={maxLength}
           onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
           className="w-full bg-transparent text-[15px] text-veloe-navy placeholder:text-gray-400 outline-none"
         />
       </div>
@@ -60,29 +64,36 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
 
   const errors = useMemo(() => {
     const e: Record<string, string> = {};
-    if (touched.fullName && !validateFullName(formData.fullName)) {
-      e.fullName = "Informe seu nome";
+    if (touched.fullName && !validateFullName(formData.fullName.trim())) {
+      e.fullName = "Informe seu nome completo";
     }
     if (touched.cpf && !validateCPF(formData.cpf)) {
       e.cpf = "CPF inválido";
     }
-    if (touched.email && !validateEmail(formData.email)) {
+    if (touched.email && !validateEmail(formData.email.trim())) {
       e.email = "E-mail inválido";
     }
     if (touched.phone && !validatePhone(formData.phone)) {
-      e.phone = "Telefone inválido";
+      e.phone = "Telefone inválido (ex: (38) 99999-9999)";
     }
     if (touched.deviceType && !formData.deviceType) {
-      e.deviceType = "Selecione seu dispositivo";
+      e.deviceType = "Selecione o tipo de dispositivo";
     }
     return e;
   }, [formData, touched]);
 
-  const isFilled = isPersonalDataFilled(formData);
+  // ✅ Validação simplificada e compatível
+  const isValid = useMemo(() => {
+    return (
+      validateFullName(formData.fullName.trim()) &&
+      validateCPF(formData.cpf) &&
+      validateEmail(formData.email.trim()) &&
+      validatePhone(formData.phone) &&
+      !!formData.deviceType
+    );
+  }, [formData]);
 
   const handleSubmit = () => {
-    if (!isFilled) return;
-
     setTouched({
       fullName: true,
       cpf: true,
@@ -90,18 +101,16 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
       phone: true,
       deviceType: true,
     });
-
-    onNext();
+    if (isValid) onNext();
   };
 
   return (
     <div className="animate-fade-in">
       <h1 className="text-2xl font-bold leading-tight text-veloe-navy sm:text-[1.65rem]">
-        Para começar, preencha alguns dados
+        Dados pessoais
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-veloe-navy/70 sm:text-[15px]">
-        Precisamos dessas informações para verificar sua elegibilidade e
-        prosseguir.
+        Preencha seus dados corretamente para continuar o cadastro.
       </p>
 
       <div className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
@@ -111,6 +120,7 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
           value={formData.fullName}
           onChange={(v) => updateFormData({ fullName: v })}
           error={errors.fullName}
+          onBlur={() => setTouched((prev) => ({ ...prev, fullName: true }))}
         />
         <FormField
           icon={<DocumentIcon />}
@@ -119,6 +129,7 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
           onChange={(v) => updateFormData({ cpf: formatCPF(v) })}
           error={errors.cpf}
           maxLength={14}
+          onBlur={() => setTouched((prev) => ({ ...prev, cpf: true }))}
         />
         <FormField
           icon={<EmailIcon />}
@@ -127,6 +138,7 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
           onChange={(v) => updateFormData({ email: v })}
           type="email"
           error={errors.email}
+          onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
         />
         <FormField
           icon={<PhoneIcon />}
@@ -135,22 +147,26 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
           onChange={(v) => updateFormData({ phone: formatPhone(v) })}
           error={errors.phone}
           maxLength={15}
+          onBlur={() => setTouched((prev) => ({ ...prev, phone: true }))}
         />
       </div>
 
       <div className="mt-6">
         <p className="mb-3 text-sm font-semibold text-veloe-navy">
-          Qual é o seu dispositivo?
+          Tipo de dispositivo
         </p>
         <div className="grid grid-cols-2 gap-3">
           {(["iphone", "android"] as DeviceType[]).map((device) => (
             <button
               key={device}
               type="button"
-              onClick={() => updateFormData({ deviceType: device })}
-              className={`flex items-center justify-center gap-2 rounded-2xl border-2 px-4 py-3.5 text-sm font-semibold transition-all ${
+              onClick={() => {
+                updateFormData({ deviceType: device });
+                setTouched((prev) => ({ ...prev, deviceType: true }));
+              }}
+              className={`flex items-center justify-center gap-2 rounded-2xl border-2 px-4 py-3.5 text-sm font-semibold transition-all duration-200 ${
                 formData.deviceType === device
-                  ? "border-veloe-cyan bg-veloe-cyan/10 text-veloe-navy"
+                  ? "border-veloe-cyan bg-veloe-cyan/10 text-veloe-navy shadow-sm"
                   : "border-gray-200 bg-white text-veloe-navy/70 hover:border-veloe-cyan/50"
               }`}
             >
@@ -182,19 +198,20 @@ export default function StepPersonalData({ onNext }: { onNext: () => void }) {
       <button
         type="button"
         onClick={handleSubmit}
-        disabled={!isFilled}
-        className={`mt-8 w-full rounded-full py-4 text-base font-bold transition-all ${
-          isFilled
-            ? "bg-veloe-navy text-white shadow-[0_4px_16px_rgba(29,27,132,0.3)] hover:bg-veloe-navy-dark"
+        disabled={!isValid}
+        className={`mt-8 w-full rounded-full py-4 text-base font-bold transition-all duration-200 ${
+          isValid
+            ? "bg-veloe-navy text-white shadow-[0_4px_16px_rgba(29,27,132,0.3)] hover:bg-veloe-navy-dark hover:shadow-[0_6px_20px_rgba(29,27,132,0.35)] active:scale-[0.98]"
             : "cursor-not-allowed bg-[#e1e1eb] text-gray-400"
         }`}
       >
-        Informe os dados
+        Continuar
       </button>
     </div>
   );
 }
 
+// Ícones mantidos iguais
 function PersonIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
