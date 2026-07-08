@@ -10,12 +10,12 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      {/* Área da imagem AGORA CLICÁVEL - Versão Desktop */}
+      {/* Área da imagem clicável - Desktop */}
       <Link
         href="/cadastro"
         onClick={() => sessionStorage.setItem("veloe-home-tab", activeTab)}
         className="pointer-events-auto absolute inset-y-0 right-0 hidden w-1/2 lg:block z-10"
-        aria-label="Iniciar resgate da TAG Veloe"
+        aria-label="Iniciar meu cadastro gratuito da TAG Veloe"
       >
         {(["pessoa-fisica", "pessoa-juridica", "parcerias"] as const).map(
           (tab) => (
@@ -29,7 +29,7 @@ export default function HeroSection() {
             >
               <Image
                 src={heroContent[tab].image}
-                alt="Iniciar resgate da TAG Veloe"
+                alt="Iniciar meu cadastro gratuito da TAG Veloe"
                 fill
                 className="object-cover object-center"
                 priority={tab === "pessoa-fisica"}
@@ -44,10 +44,7 @@ export default function HeroSection() {
       <div className="relative mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row lg:items-stretch lg:min-h-[580px]">
           <div className="order-2 flex flex-col justify-center px-4 pb-10 pt-6 sm:px-6 md:px-8 lg:order-1 lg:w-[52%] lg:py-16 lg:pl-10 lg:pr-6 xl:pl-14">
-            <div
-              key={activeTab}
-              className="animate-fade-in"
-            >
+            <div key={activeTab} className="animate-fade-in">
               <h1 className="text-[1.65rem] font-bold leading-[1.2] text-veloe-navy sm:text-[1.85rem] md:text-4xl lg:text-[2.65rem] lg:leading-[1.15] xl:text-[2.75rem]">
                 {content.title}
               </h1>
@@ -76,12 +73,12 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Área da imagem AGORA CLICÁVEL - Versão Celular */}
+          {/* Área da imagem clicável - Mobile */}
           <Link
             href="/cadastro"
             onClick={() => sessionStorage.setItem("veloe-home-tab", activeTab)}
             className="relative order-1 h-[260px] w-full sm:h-[320px] md:h-[380px] lg:order-2 lg:hidden z-10"
-            aria-label="Iniciar resgate da TAG Veloe"
+            aria-label="Iniciar meu cadastro gratuito da TAG Veloe"
           >
             {(["pessoa-fisica", "pessoa-juridica", "parcerias"] as const).map(
               (tab) => (
@@ -165,11 +162,33 @@ export function CTAButton({
       href="/cadastro"
       id={id}
       onClick={() => sessionStorage.setItem("veloe-home-tab", activeTab)}
-      className={`group inline-flex items-center overflow-hidden rounded-full bg-veloe-cyan py-2.5 pl-7 pr-2 text-base font-bold text-white shadow-[0_6px_20px_rgba(38,208,224,0.45)] transition-all duration-200 hover:bg-veloe-cyan-hover hover:shadow-[0_8px_24px_rgba(38,208,224,0.55)] active:scale-[0.98] sm:py-3 sm:pl-9 sm:pr-2.5 sm:text-lg md:text-xl md:pl-11 md:py-3.5 ${className}`}
+      className={`
+        group relative inline-flex items-center overflow-hidden rounded-full
+        bg-veloe-cyan py-3 pl-8 pr-2.5 text-base font-extrabold text-white
+        shadow-[0_6px_20px_rgba(38,208,224,0.45)] transition-all duration-300
+        hover:bg-veloe-cyan-hover hover:shadow-[0_8px_28px_rgba(38,208,224,0.6)]
+        active:scale-[0.97]
+        border-2 border-white outline outline-2 outline-veloe-cyan/30
+        animate-pulse-slow
+        sm:py-3.5 sm:pl-10 sm:pr-3 sm:text-lg
+        md:py-4 md:pl-12 md:pr-3.5 md:text-xl
+        ${className}
+      `}
     >
-      <span className="pr-4 sm:pr-5">Iniciar resgate</span>
-      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-veloe-cyan transition-transform duration-200 group-hover:translate-x-1 sm:h-11 sm:w-11 md:h-12 md:w-12">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <style>{`
+        @keyframes pulse-slow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(38, 208, 224, 0.4); }
+          50% { box-shadow: 0 0 0 8px rgba(38, 208, 224, 0); }
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 2.5s infinite;
+        }
+      `}</style>
+
+      {/* ✅ Texto alterado aqui */}
+      <span className="pr-4 sm:pr-5">Iniciar meu cadastro gratuito</span>
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-veloe-cyan transition-transform duration-300 group-hover:translate-x-1.5 sm:h-12 sm:w-12 md:h-14 md:w-14">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path
             d="M9 6l6 6-6 6"
             stroke="currentColor"
