@@ -1,12 +1,11 @@
 "use client";
 
 import { useRegistration } from "@/context/RegistrationContext";
+import type { PartnerBank } from "@/lib/types";
 
-// ✅ Define o tipo aqui mesmo, sem precisar importar de fora
-type Bank = "banco-do-brasil" | "bradesco" | "itau" | "santander" | "caixa" | "banrisul" | "outros";
-
+// Usamos o tipo que já existe no sistema
 const options: {
-  value: Bank;
+  value: PartnerBank;
   title: string;
 }[] = [
   { value: "banco-do-brasil", title: "Banco do Brasil" },
@@ -20,7 +19,9 @@ const options: {
 
 export default function StepStickers({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
-  const isValid = !!formData.bank;
+
+  // Verificação segura e compatível com o tipo existente
+  const isValid = !!formData.bank && formData.bank !== "";
 
   return (
     <div className="animate-fade-in">
