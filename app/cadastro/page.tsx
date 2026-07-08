@@ -11,6 +11,14 @@ import StepVehicle from "@/components/cadastro/StepVehicle";
 import { useRegistration } from "@/context/RegistrationContext";
 import type { Registration } from "@/lib/types";
 
+// 🛠️ Define as funções para o TypeScript não reclamar
+declare global {
+  interface Window {
+    trackGoogleConversion?: () => void;
+    trackCompleteRegistration?: () => void;
+  }
+}
+
 async function saveToArchive(
   formData: ReturnType<typeof useRegistration>["formData"],
   registrationId: string,
@@ -84,10 +92,10 @@ export default function CadastroPage() {
           setSubStep(2);
         });
 
-        // ✅ AQUI: Dispara a contagem para Google Ads e Meta Pixel
+        // ✅ Dispara as conversões
         if (typeof window !== "undefined") {
-          if (window.trackGoogleConversion) window.trackGoogleConversion();
-          if (window.trackCompleteRegistration) window.trackCompleteRegistration();
+          window.trackGoogleConversion?.();
+          window.trackCompleteRegistration?.();
         }
 
         window.scrollTo({ top: 0, behavior: "smooth" });
