@@ -165,27 +165,30 @@ export function CTAButton({
       className={`
         group relative inline-flex items-center overflow-hidden rounded-full
         bg-veloe-cyan py-3 pl-8 pr-2.5 text-base font-extrabold text-white
-        shadow-[0_6px_20px_rgba(38,208,224,0.45)] transition-all duration-300
-        hover:bg-veloe-cyan-hover hover:shadow-[0_8px_28px_rgba(38,208,224,0.6)]
+        shadow-[0_6px_20px_rgba(38,208,224,0.5)] transition-all duration-300
+        hover:bg-veloe-cyan-hover hover:shadow-[0_8px_28px_rgba(38,208,224,0.7)]
         active:scale-[0.97]
-        border-2 border-white outline outline-2 outline-veloe-cyan/30
-        animate-pulse-slow
+        border-2 border-white
+        animate-pulse-mais-forte
         sm:py-3.5 sm:pl-10 sm:pr-3 sm:text-lg
         md:py-4 md:pl-12 md:pr-3.5 md:text-xl
         ${className}
       `}
     >
       <style>{`
-        @keyframes pulse-slow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(38, 208, 224, 0.4); }
-          50% { box-shadow: 0 0 0 8px rgba(38, 208, 224, 0); }
+        @keyframes pulse-mais-forte {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(38, 208, 224, 0.65);
+          }
+          50% {
+            box-shadow: 0 0 0 12px rgba(38, 208, 224, 0);
+          }
         }
-        .animate-pulse-slow {
-          animation: pulse-slow 2.5s infinite;
+        .animate-pulse-mais-forte {
+          animation: pulse-mais-forte 2.2s infinite ease-in-out;
         }
       `}</style>
 
-      {/* ✅ Texto alterado aqui */}
       <span className="pr-4 sm:pr-5">Iniciar meu cadastro gratuito</span>
       <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-veloe-cyan transition-transform duration-300 group-hover:translate-x-1.5 sm:h-12 sm:w-12 md:h-14 md:w-14">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
