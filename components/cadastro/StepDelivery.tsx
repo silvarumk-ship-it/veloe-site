@@ -26,8 +26,8 @@ const options: {
 export default function StepDelivery({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
 
-  // ✅ Verificação simples e reativa: botão libera na hora
-  const isValid = !!formData.deliveryChoice;
+  // ✅ Validação segura e compatível com o tipo DeliveryChoice
+  const isValid = formData.deliveryChoice === "yes" || formData.deliveryChoice === "no";
 
   return (
     <div className="animate-fade-in">
@@ -45,10 +45,7 @@ export default function StepDelivery({ onNext }: { onNext: () => void }) {
             <button
               key={option.value}
               type="button"
-              onClick={() => {
-                // ✅ Atualiza o dado de forma imediata
-                updateFormData({ deliveryChoice: option.value });
-              }}
+              onClick={() => updateFormData({ deliveryChoice: option.value })}
               className={`flex w-full items-center gap-4 rounded-2xl border-2 bg-white p-4 text-left transition-all duration-200 sm:p-5 ${
                 selected
                   ? "border-veloe-cyan shadow-[0_4px_16px_rgba(38,208,224,0.2)] scale-[1.01]"
