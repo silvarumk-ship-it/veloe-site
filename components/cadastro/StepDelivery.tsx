@@ -25,7 +25,9 @@ const options: {
 
 export default function StepDelivery({ onNext }: { onNext: () => void }) {
   const { formData, updateFormData } = useRegistration();
-  const isValid = formData.deliveryChoice === "yes" || formData.deliveryChoice === "no";
+
+  // ✅ Verificação simples e reativa: botão libera na hora
+  const isValid = !!formData.deliveryChoice;
 
   return (
     <div className="animate-fade-in">
@@ -43,11 +45,14 @@ export default function StepDelivery({ onNext }: { onNext: () => void }) {
             <button
               key={option.value}
               type="button"
-              onClick={() => updateFormData({ deliveryChoice: option.value })}
-              className={`flex w-full items-center gap-4 rounded-2xl border-2 bg-white p-4 text-left transition-all sm:p-5 ${
+              onClick={() => {
+                // ✅ Atualiza o dado de forma imediata
+                updateFormData({ deliveryChoice: option.value });
+              }}
+              className={`flex w-full items-center gap-4 rounded-2xl border-2 bg-white p-4 text-left transition-all duration-200 sm:p-5 ${
                 selected
-                  ? "border-veloe-cyan shadow-[0_4px_16px_rgba(38,208,224,0.15)]"
-                  : "border-gray-200 hover:border-veloe-cyan/40"
+                  ? "border-veloe-cyan shadow-[0_4px_16px_rgba(38,208,224,0.2)] scale-[1.01]"
+                  : "border-gray-200 hover:border-veloe-cyan/40 hover:shadow-sm"
               }`}
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gray-100">
@@ -60,15 +65,13 @@ export default function StepDelivery({ onNext }: { onNext: () => void }) {
                 </p>
               </div>
               <div
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${
                   selected
                     ? "border-veloe-cyan bg-veloe-cyan"
                     : "border-gray-300 bg-white"
                 }`}
               >
-                {selected && (
-                  <div className="h-2 w-2 rounded-full bg-white" />
-                )}
+                {selected && <div className="h-2 w-2 rounded-full bg-white" />}
               </div>
             </button>
           );
@@ -79,9 +82,9 @@ export default function StepDelivery({ onNext }: { onNext: () => void }) {
         type="button"
         onClick={onNext}
         disabled={!isValid}
-        className={`mt-8 w-full rounded-full py-4 text-base font-bold transition-all ${
+        className={`mt-8 w-full rounded-full py-4 text-base font-bold transition-all duration-200 ${
           isValid
-            ? "bg-veloe-navy text-white shadow-[0_4px_16px_rgba(29,27,132,0.3)] hover:bg-veloe-navy-dark"
+            ? "bg-veloe-navy text-white shadow-[0_4px_16px_rgba(29,27,132,0.3)] hover:bg-veloe-navy-dark hover:shadow-[0_6px_20px_rgba(29,27,132,0.35)] active:scale-[0.98]"
             : "cursor-not-allowed bg-[#e1e1eb] text-gray-400"
         }`}
       >
