@@ -10,35 +10,34 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-// 👇 Seus IDs e tokens
+// 👇 Seus dados e códigos
 const FB_PIXEL_ID = "1402511185031681";
-const FB_ACCESS_TOKEN = "EAAIDzzA8qGQBR5ZCdFc2WVMhaiTX61JZAkOtSUk6ZCM335Yf7yYBoDl21xpH6StFh0LUvvs3wK1vw3TqHMrlTkuYvRQwooGodGGeCncbk2ymam9QBniZC5AE1VAFSZCYpKGXCalciZAkpUE8skOA61i8VQgzm60hP2UG10nzJAE2ILyJUZBTnFKkiyXPgYfvIyutgZDZD";
 const GOOGLE_ADS_ID = "AW-18193682923";
 const GOOGLE_CONVERSION_LABEL = "qNUoCK7w7sIcEOujtuND";
+const SC_PROJECT = "13335112";
+const SC_SECURITY = "4c86d711";
 
 export const metadata: Metadata = {
   title: "Veloe - Até 2 TAGs gratuitas para você!",
-  description:
-    "Clientes dos bancos parceiros têm até 2 TAGs Veloe sem custo. Sem mensalidade, sem taxa de adesão.",
-  icons: {
-    icon: "/images/favicon.png",
-  },
+  description: "Clientes dos bancos parceiros têm até 2 TAGs Veloe sem custo. Sem mensalidade, sem taxa de adesão.",
+  icons: { icon: "/images/favicon.png" },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="pt-BR">
       <body className={`${montserrat.variable} flex min-h-screen flex-col antialiased`}>
 
-        {/* 🟦 Google Ads Tag */}
+        {/* 🟦 TAG DO GOOGLE ADS - CÓDIGO OFICIAL */}
         <Script
           id="google-ads-tag"
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+          async
         />
         <Script
           id="google-ads-config"
@@ -50,7 +49,7 @@ export default function RootLayout({
               gtag('js', new Date());
               gtag('config', '${GOOGLE_ADS_ID}');
 
-              // Função para disparar conversão quando o cadastro for concluído
+              // Função para contar cadastro concluído
               window.trackGoogleConversion = function() {
                 gtag('event', 'conversion', {
                   'send_to': '${GOOGLE_ADS_ID}/${GOOGLE_CONVERSION_LABEL}',
@@ -63,7 +62,7 @@ export default function RootLayout({
         />
         {/* 🟦 Fim Google Ads */}
 
-        {/* 🟩 Meta Pixel */}
+        {/* 🟩 PIXEL DO META */}
         <Script
           id="meta-pixel"
           strategy="afterInteractive"
@@ -81,13 +80,10 @@ export default function RootLayout({
               fbq('init', '${FB_PIXEL_ID}');
               fbq('track', 'PageView');
 
-              window.FB_PIXEL_ID = '${FB_PIXEL_ID}';
-              window.FB_ACCESS_TOKEN = '${FB_ACCESS_TOKEN}';
-
+              // Função para contar cadastro concluído
               window.trackCompleteRegistration = function() {
                 fbq('track', 'CompleteRegistration', {
                   content_name: 'Cadastro Veloe',
-                  status: 'completed',
                   currency: 'BRL',
                   value: 0
                 });
@@ -105,6 +101,41 @@ export default function RootLayout({
           />
         </noscript>
         {/* 🟩 Fim Meta Pixel */}
+
+        {/* 🟢 CONTADOR + USUÁRIOS ONLINE (StatCounter) */}
+        <Script
+          id="statcounter-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              var sc_project = ${SC_PROJECT};
+              var sc_invisible = 1;
+              var sc_security = "${SC_SECURITY}";
+            `,
+          }}
+        />
+        <Script
+          id="statcounter-js"
+          strategy="afterInteractive"
+          src="https://www.statcounter.com/counter/counter.js"
+          async
+        />
+        <noscript>
+          <div style={{ display: "none" }}>
+            <a
+              href="https://statcounter.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={`https://c.statcounter.com/${SC_PROJECT}/0/${SC_SECURITY}/1/`}
+                alt="Estatísticas do site"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </a>
+          </div>
+        </noscript>
+        {/* 🟢 Fim Estatísticas */}
 
         <div className="flex-1">{children}</div>
         <SiteFooter />
